@@ -1,14 +1,31 @@
 "use client";
 import React, { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const ContactForm = () => {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
 
-  const formData = (event: any) => {
+  const formData = async (event: any) => {
     event.preventDefault();
+    await axios
+      .post("/api/contact", {
+        name,
+        phone,
+        email,
+        address,
+      })
+      .then(() => {
+        toast.success("Contact saved!"), router.push("/Contact-List");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     console.log({ name, phone, email, address });
   };
   return (
